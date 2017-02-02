@@ -1,0 +1,124 @@
+﻿
+@{
+    ViewBag.Title = "Customer";
+}
+
+<div class="info-container">
+    <br />
+    <div class="row">
+        <div class="clearfix"></div>
+        <div class="col-md-3">
+            <input id="txtSearch" type="text" placeholder="Search by Customer ID">
+        </div>
+        <div class="col-lg-3">
+            <button id="btnSearch" type="button">Search</button>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div id="grid"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //Search Button
+        $("#btnSearch").kendoButton({
+            click: function (e) {
+                
+                $.ajax({
+                    url: "/api/CustomerApi/Customer?id=" + $("#txtSearch").val(),
+                    dataType: 'json',
+                    type: 'get',                    
+                    success: function (result)
+                    {
+                        grid.data('kendoGrid').dataSource.data(result);
+                    },
+                    error: function (result) {
+                        options.error(result);
+                        alert("ID no encontrado!");
+                    }
+                });
+            }
+        });
+        function onSearch() {
+        }
+        //Grid DataSource
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "/api/CustomerApi/Customer?id=",
+                    dataType: "json"
+                },
+                update: {
+                    url: "/api/CustomerApi/UpdateCustomer?update=true",
+                    dataType: 'json',
+                    type: 'POST',
+                },
+                destroy: {
+                    url: "/api/CustomerApi/DeleteCustomer?Delete=true",
+                    dataType: 'json',
+                    type: 'POST',
+                },
+                create: {
+                    url: "/api/CustomerApi/CreateUser?create=true",
+                    dataType: 'json',
+                    type: 'POST',
+                },
+                parameterMap: function (options, operation) {
+                    if (operation !== "read" && options.models) {
+                        return { models: kendo.stringify(options.models) };
+                    }
+                }
+            },
+            batch: true,
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "CustomerId",
+                    fields: {
+                        CustomerId: { editable: false, nullable: false, defaultValue: 0 },
+                        Title: { editable: true },
+                        FirstName: { editable: true },
+                        MiddleName: { editable: true },
+                        LastName: { editable: true },
+                        Suffix: { editable: true },
+                        CompanyName: { editable: true },
+                        SalesPerson: { editable: true },
+                        EmailAddress: { editable: true },
+                        Phone: { editable: true },
+
+                    }
+                }
+            }
+        });
+
+        //Grid
+       var grid = $("#grid").kendoGrid(
+        {
+            dataSource: dataSource,
+            navigatable: true,
+            scrollable: true,
+            editable: true,
+            destroy: true,
+            heigt: 700,
+            groupable: true,
+            sortable: true,
+            pageable: true,
+            toolbar: ["create", "save", "cancel"],
+            columns: [
+            { field: "CustomerId", width: 120, defaultValue: 0 },
+            { field: "Title", title: "Title", width: 120 },
+            { field: "FirstName", title: "First Name", width: 120 },
+            { field: "MiddleName", title: "Middle Name", width: 120 },
+            { field: "LastName", title: "Last Name", width: 120 },
+            { field: "Suffix", title: "Suffix", width: 120 },
+            { field: "CompanyName", title: "Company Name", width: 120 },
+            { field: "SalesPerson", title: "Sales Person", width: 120 },
+            { field: "EmailAddress", title: "Email Address", width: 120 },
+            { field: "Phone", title: "Phone", width: 120 },
+            { command: "destroy", title: "&nbsp;", width: 150 }],
+        });
+    });
+
+</script>
