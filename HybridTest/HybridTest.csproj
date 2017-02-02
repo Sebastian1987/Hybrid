@@ -935,7 +935,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>58501</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:58501/Customer/Index</IISUrl>
+          <IISUrl>http://localhost:58501/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
